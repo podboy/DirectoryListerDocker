@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  app:
+    container_name: directory-lister
+    image: localhost/directory-lister:latest
+    privileged: true
+    user: ${HOST_USER_ID:-0}:${HOST_GROUP_ID:-0}
+    ports:
+      - ${APP_PORT:-8008}:80
+    volumes:
+      - ./tests/.env:/var/www/html/.env
+      - ./tests/.hidden:/var/www/html/.hidden
+      - ./tests/README.md:/var/www/html/README.md
+      - ./tests/files:/var/www/html/files

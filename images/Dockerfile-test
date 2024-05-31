@@ -1,0 +1,25 @@
+FROM docker.io/php:8.2-apache
+
+LABEL maintainer="mingzhebaosheng"
+ENV version="4.0.0"
+
+RUN apt update
+RUN apt install -y \
+  libzip-dev \
+  libpng-dev \
+  libxml2-dev \
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  wget \
+  tar \
+  zip
+RUN rm -rf /var/lib/apt/lists/*
+RUN pecl install zip
+RUN docker-php-ext-enable zip
+
+COPY ./releases/DirectoryLister-${version}.tar.gz /tmp/DirectoryLister-${version}.tar.gz
+RUN tar -xzf /tmp/DirectoryLister-${version}.tar.gz -C /var/www/html/
+# RUN rm -rf /var/www/html/LICENSE /var/www/html/README.md /var/www/html/directory-lister.svg
+RUN chown -R www-data:www-data /var/www/html
+
+RUN a2enmod rewrite

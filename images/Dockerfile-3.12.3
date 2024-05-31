@@ -1,0 +1,20 @@
+FROM docker.io/php:7.4-apache
+
+LABEL maintainer="mingzhebaosheng"
+ENV version="3.12.3"
+
+RUN apt update && apt install -y \
+  libzip-dev \
+  libpng-dev \
+  libxml2-dev \
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  wget \
+  tar \
+  zip \
+  && rm -rf /var/lib/apt/lists/* \
+  && pecl install zip \
+  && docker-php-ext-enable zip \
+  && wget https://github.com/DirectoryLister/DirectoryLister/releases/download/${version}/DirectoryLister-${version}.tar.gz -O - | tar -xz \
+  && chown -R www-data:www-data /var/www/html \
+  && a2enmod rewrite
